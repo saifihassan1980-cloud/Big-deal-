@@ -1,30 +1,23 @@
 const { Client, GatewayIntentBits } = require("discord.js");
 
-// 🔐 TOKEN environment se aayega
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds],
+});
+
 const TOKEN = process.env.TOKEN;
 
+// Debug check
+console.log("TOKEN CHECK:", TOKEN ? "FOUND ✅" : "MISSING ❌");
+
 if (!TOKEN) {
-  console.log("❌ TOKEN missing! Variables me add kar.");
+  console.log("❌ TOKEN missing!");
   process.exit(1);
 }
 
-const client = new Client({
-  intents: [GatewayIntentBits.Guilds]
-});
-
-// ✅ Bot ready
 client.once("ready", () => {
   console.log(`🔥 Bot Online: ${client.user.tag}`);
 });
 
-// ✅ Simple slash command response (optional test)
-client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
-
-  if (interaction.commandName === "ping") {
-    await interaction.reply("🏓 Pong!");
-  }
+client.login(TOKEN).catch((err) => {
+  console.error("❌ Login Error:", err);
 });
-
-// 🔐 Login
-client.login(TOKEN);
